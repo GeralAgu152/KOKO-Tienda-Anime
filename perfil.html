@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koko – Mi Perfil</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="CSS/perfil.css">
+  <style>
+    /* Estilos para edición de perfil (RF5) */
+    .edit-form { display:none; }
+    .edit-form.visible { display:block; }
+    .edit-form input {
+      width:100%; border:1.5px solid #dde0f7; border-radius:14px;
+      padding:10px 14px; font-family:'Poppins',sans-serif; font-size:14px;
+      outline:none; transition:border-color .2s; margin-bottom:12px;
+    }
+    .edit-form input:focus { border-color:rgb(91,91,229); box-shadow:0 0 0 3px rgba(91,91,229,.15); }
+    .btn-edit-save {
+      background:rgb(91,91,229); color:#fff; border:none; border-radius:20px;
+      padding:10px 24px; font-family:'Poppins',sans-serif; font-size:14px;
+      font-weight:700; cursor:pointer; transition:background .2s; margin-right:8px;
+    }
+    .btn-edit-save:hover { background:rgb(60,60,200); }
+    .btn-edit-cancel {
+      background:none; color:#aaa; border:1.5px solid #eee;
+      border-radius:20px; padding:9px 20px; font-family:'Poppins',sans-serif;
+      font-size:13px; cursor:pointer; transition:all .2s;
+    }
+    .btn-edit-cancel:hover { border-color:coral; color:coral; }
+    .msg-exito {
+      display:none; background:#f0fff0; color:#2a7a2a;
+      border-radius:12px; padding:10px 16px; font-size:14px;
+      font-weight:600; margin-top:12px;
+    }
+    .msg-exito.visible { display:block; }
+    /* Cupones admin */
+    .cupon-tag {
+      display:inline-flex; align-items:center; gap:6px;
+      background:#eef0ff; color:rgb(91,91,229);
+      border-radius:20px; padding:5px 14px;
+      font-size:13px; font-weight:700; margin:4px;
+    }
+    .cupon-tag button {
+      background:none; border:none; color:#aaa;
+      cursor:pointer; font-size:14px; padding:0; line-height:1;
+    }
+    .cupon-tag button:hover { color:coral; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg koko-nav">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand koko-logo" href="productos.html">Koko</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarPerfil">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarPerfil">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="productos.html">Productos</a></li>
+        <li class="nav-item"><a class="nav-link" href="quienes-somos.html">Quiénes somos</a></li>
+        <li class="nav-item"><a class="nav-link" href="https://wa.me/3192858588?text=Hola%2C%20quiero%20contactarme%20con%20Koko" target="_blank">Contáctanos</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" id="navUsuario">
+            👤 Mi cuenta
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="perfil.html">👤 Mi perfil</a></li>
+            <li><a class="dropdown-item" href="perfil.html#rastreo">📦 Rastrear pedido</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#" id="btnCerrarSesion">🚪 Cerrar sesión</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main class="perfil-main container">
+
+  <!-- CABECERA -->
+  <section class="perfil-header">
+    <div class="perfil-avatar" id="perfilAvatar">K</div>
+    <div class="perfil-info">
+      <h1 id="perfilNombre">Cargando...</h1>
+      <p class="perfil-tag">Cliente KOKO ⭐</p>
+      <span class="perfil-badge">Otaku nivel: Legendario 🔥</span>
+    </div>
+    <button class="btn-cerrar-sesion" id="btnCerrarSesionGrande">🚪 Cerrar sesión</button>
+  </section>
+
+  <!-- TABS -->
+  <div class="perfil-tabs">
+    <button class="perfil-tab active" onclick="mostrarTab('info', this)">📋 Mi información</button>
+    <button class="perfil-tab" onclick="mostrarTab('historial', this)">📦 Mis compras</button>
+    <button class="perfil-tab" onclick="mostrarTab('rastreo', this)" id="tabRastreo">🚚 Rastrear pedido</button>
+    <button class="perfil-tab" onclick="mostrarTab('admin', this)" id="tabAdmin" style="display:none;">⚙️ Admin</button>
+  </div>
+
+  <!-- TAB: INFO (RF5 – edición de datos) -->
+  <div class="perfil-section" id="tab-info">
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card__icon">👤</div>
+        <div class="info-card__data">
+          <span class="info-card__label">Usuario</span>
+          <span class="info-card__value" id="infoUsuario">—</span>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-card__icon">📧</div>
+        <div class="info-card__data">
+          <span class="info-card__label">Correo</span>
+          <span class="info-card__value" id="infoEmail">—</span>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-card__icon">📍</div>
+        <div class="info-card__data">
+          <span class="info-card__label">Ubicación</span>
+          <span class="info-card__value">Medellín, Colombia</span>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-card__icon">🛒</div>
+        <div class="info-card__data">
+          <span class="info-card__label">Compras realizadas</span>
+          <span class="info-card__value" id="infoCompras">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RF5: Formulario de edición -->
+    <div style="margin-bottom:24px;">
+      <h3 style="font-size:16px;font-weight:700;color:#111;margin-bottom:14px;">✏️ Actualizar mis datos</h3>
+      <div class="edit-form visible" id="editForm">
+        <input type="text" id="editNombre" placeholder="Nombre de usuario">
+        <input type="email" id="editEmail" placeholder="Correo electrónico">
+        <div>
+          <button class="btn-edit-save" onclick="guardarPerfil()">Guardar cambios</button>
+        </div>
+        <div class="msg-exito" id="msgExito">✅ ¡Datos actualizados correctamente!</div>
+      </div>
+    </div>
+
+    <div class="acciones-rapidas">
+      <h3>Acciones rápidas</h3>
+      <div class="acciones-grid">
+        <button class="accion-btn" onclick="mostrarTab('historial', null)">📦 Ver mis compras</button>
+        <button class="accion-btn" onclick="mostrarTab('rastreo', null)">🚚 Rastrear pedido</button>
+        <a class="accion-btn" href="productos.html">🛍️ Seguir comprando</a>
+        <a class="accion-btn" href="https://wa.me/3192858588" target="_blank">💬 Contactar soporte</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: HISTORIAL (RF4, RF8) -->
+  <div class="perfil-section" id="tab-historial" style="display:none;">
+    <h2 class="section-title">📦 Mis compras</h2>
+    <div id="historialLista"></div>
+    <div class="empty-state" id="historialVacio" style="display:none;">
+      <span>😢</span>
+      <p>Aún no tienes compras registradas.</p>
+      <a href="productos.html" class="btn-ir">Ver productos</a>
+    </div>
+  </div>
+
+  <!-- TAB: RASTREO -->
+  <div class="perfil-section" id="tab-rastreo" style="display:none;">
+    <h2 class="section-title">🚚 Rastrear pedido</h2>
+    <p class="section-sub">Ingresa el número de tu pedido para ver el estado de tu envío.</p>
+
+    <div class="rastreo-form">
+      <input type="text" id="inputPedido" placeholder="Ej: KOKO-123456" class="rastreo-input" maxlength="20">
+      <button class="rastreo-btn" onclick="rastrearPedido()">Rastrear</button>
+    </div>
+
+    <div class="rastreo-resultado" id="rastreoResultado" style="display:none;">
+      <div class="rastreo-info">
+        <span class="rastreo-num" id="rastreoNum"></span>
+        <span class="rastreo-estado" id="rastreoEstado"></span>
+      </div>
+      <div class="rastreo-timeline">
+        <div class="timeline-step" id="step1">
+          <div class="timeline-icon">✅</div>
+          <div class="timeline-data"><strong>Pedido confirmado</strong><span id="step1fecha"></span></div>
+        </div>
+        <div class="timeline-step" id="step2">
+          <div class="timeline-icon">📦</div>
+          <div class="timeline-data"><strong>En preparación</strong><span id="step2fecha"></span></div>
+        </div>
+        <div class="timeline-step" id="step3">
+          <div class="timeline-icon">🚚</div>
+          <div class="timeline-data"><strong>En camino</strong><span id="step3fecha"></span></div>
+        </div>
+        <div class="timeline-step" id="step4">
+          <div class="timeline-icon">🏠</div>
+          <div class="timeline-data"><strong>Entregado</strong><span id="step4fecha"></span></div>
+        </div>
+      </div>
+      <div class="rastreo-detalle">
+        <p id="rastreoMensaje"></p>
+        <a href="https://wa.me/3192858588?text=Hola%2C%20quiero%20rastrear%20mi%20pedido" target="_blank" class="btn-wsp-rastreo">
+          💬 Consultar por WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <div class="rastreo-error" id="rastreoError" style="display:none;">
+      <span>🔍</span>
+      <p>No encontramos ese número de pedido. Verifica el código o contáctanos.</p>
+      <a href="https://wa.me/3192858588" target="_blank" class="btn-wsp-rastreo">💬 Contactar soporte</a>
+    </div>
+
+    <div class="rastreo-recientes" id="rastreoRecientes">
+      <h3>Tus compras recientes</h3>
+      <div id="recientesLista"></div>
+      <div class="empty-state" id="recientesVacio" style="display:none;">
+        <span>📭</span><p>Aún no tienes compras para rastrear.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: ADMIN (OF8 – reportes, RF7 – cupones, OF4 – gestión) -->
+  <div class="perfil-section" id="tab-admin" style="display:none;">
+    <h2 class="section-title">⚙️ Panel de Administrador</h2>
+
+    <!-- Reportes (OF8) -->
+    <div style="margin-bottom:36px;">
+      <h3 style="font-size:16px;font-weight:700;color:#111;margin-bottom:16px;">📊 Reporte de ventas</h3>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;" id="reporteMetricas"></div>
+      <h4 style="font-size:14px;font-weight:700;color:#333;margin-bottom:10px;">Productos más vendidos</h4>
+      <div id="reporteProductos"></div>
+    </div>
+
+    <hr style="border:1px solid #f0f0f0;margin-bottom:28px;">
+
+    <!-- Gestión de cupones (RF7, OF7) -->
+    <div style="margin-bottom:36px;">
+      <h3 style="font-size:16px;font-weight:700;color:#111;margin-bottom:16px;">🎟️ Gestionar descuentos y promociones</h3>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
+        <input type="text" id="nuevoCuponCodigo" placeholder="Código (ej: VERANO30)" style="border:1.5px solid #dde0f7;border-radius:14px;padding:10px 14px;font-family:Poppins,sans-serif;font-size:14px;outline:none;flex:1;min-width:140px;">
+        <input type="number" id="nuevoCuponPct" placeholder="% desc." min="1" max="99" style="border:1.5px solid #dde0f7;border-radius:14px;padding:10px 14px;font-family:Poppins,sans-serif;font-size:14px;outline:none;width:100px;">
+        <button onclick="agregarCuponAdmin()" style="background:rgb(91,91,229);color:#fff;border:none;border-radius:14px;padding:10px 22px;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">+ Agregar</button>
+      </div>
+      <div id="listaCupones"></div>
+    </div>
+
+    <hr style="border:1px solid #f0f0f0;margin-bottom:28px;">
+
+    <!-- Inventario (RD6) -->
+    <div>
+      <h3 style="font-size:16px;font-weight:700;color:#111;margin-bottom:16px;">📦 Inventario de productos</h3>
+      <div id="tablaInventario"></div>
+    </div>
+
+    <!-- Historial de ventas completo -->
+    <div style="margin-top:36px;">
+      <h3 style="font-size:16px;font-weight:700;color:#111;margin-bottom:16px;">🧾 Todas las ventas (OF4)</h3>
+      <div id="adminVentas"></div>
+    </div>
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="JS/koko.js"></script>
+<script>
+KK.requireAuth();
+KK.initNavbar('btnCerrarSesion');
+
+const user = KK.getUser() || {};
+const nombre = localStorage.getItem('kk_logueado') || 'Usuario';
+
+// Mostrar datos
+document.getElementById('perfilNombre').textContent = nombre;
+document.getElementById('infoUsuario').textContent  = nombre;
+document.getElementById('infoEmail').textContent    = user.email || '—';
+document.getElementById('navUsuario').textContent   = '👤 ' + nombre;
+document.getElementById('perfilAvatar').textContent = nombre.charAt(0).toUpperCase();
+document.getElementById('editNombre').value = nombre;
+document.getElementById('editEmail').value  = user.email || '';
+
+const historial = KK.getHistorial();
+document.getElementById('infoCompras').textContent = historial.length;
+
+// Mostrar tab Admin si el usuario es "admin@koko.com"
+if (user.email === 'admin@koko.com') {
+  document.getElementById('tabAdmin').style.display = 'inline-block';
+}
+
+// Cerrar sesión
+document.getElementById('btnCerrarSesionGrande').addEventListener('click', () => KK.logout());
+
+/* ── RF5: ACTUALIZAR PERFIL ── */
+function guardarPerfil() {
+  const nuevoNombre = document.getElementById('editNombre').value.trim();
+  const nuevoEmail  = document.getElementById('editEmail').value.trim();
+  if (!nuevoNombre) { alert('El nombre no puede estar vacío.'); return; }
+  if (!nuevoEmail.includes('@')) { alert('Correo inválido.'); return; }
+  KK.actualizarPerfil(nuevoNombre, nuevoEmail);
+  document.getElementById('perfilNombre').textContent = nuevoNombre;
+  document.getElementById('infoUsuario').textContent  = nuevoNombre;
+  document.getElementById('infoEmail').textContent    = nuevoEmail;
+  document.getElementById('perfilAvatar').textContent = nuevoNombre.charAt(0).toUpperCase();
+  const msg = document.getElementById('msgExito');
+  msg.classList.add('visible');
+  setTimeout(() => msg.classList.remove('visible'), 3000);
+}
+
+/* ── TABS ── */
+function mostrarTab(tab, btn) {
+  document.querySelectorAll('.perfil-section').forEach(s => s.style.display = 'none');
+  document.querySelectorAll('.perfil-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).style.display = 'block';
+  if (btn) btn.classList.add('active');
+  if (tab === 'historial') renderHistorial();
+  if (tab === 'rastreo')   renderRecientes();
+  if (tab === 'admin')     renderAdmin();
+}
+
+/* ── RF4, RF8: HISTORIAL ── */
+function renderHistorial() {
+  const lista  = document.getElementById('historialLista');
+  const vacio  = document.getElementById('historialVacio');
+  if (!historial.length) { lista.innerHTML=''; vacio.style.display='flex'; return; }
+  vacio.style.display='none';
+  lista.innerHTML = historial.map((orden,i) => `
+    <div class="orden-card">
+      <div class="orden-card__header">
+        <span class="orden-num">📦 ${orden.id}</span>
+        <span class="orden-fecha">${orden.fecha}</span>
+        <span class="orden-estado enviado">${orden.estado === 'confirmado' ? 'Confirmado ✅' : 'Enviado ✅'}</span>
+      </div>
+      <!-- RD2: subtotal + IVA + envío -->
+      <div style="font-size:12px;color:#888;padding:6px 0 10px;border-bottom:1px solid #f0f0f0;margin-bottom:10px;">
+        Subtotal: $${Number(orden.subtotal).toFixed(2)} · IVA (19%): $${Number(orden.impuesto||0).toFixed(2)} · Envío: $${Number(orden.envio).toFixed(2)}
+        ${orden.descuento > 0 ? ` · Descuento: –$${Number(orden.descuento).toFixed(2)}` : ''}
+      </div>
+      <div class="orden-items">
+        ${orden.items.map(p => `
+          <div class="orden-item">
+            <img src="${p.img}" alt="${p.nombre}">
+            <div><p>${p.nombre}</p><span>$${p.precio.toFixed(2)} × ${p.cantidad}</span></div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="orden-card__footer">
+        <span class="orden-total">Total: <strong>$${Number(orden.total).toFixed(2)}</strong></span>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-rastrear-orden" onclick="verFactura(${i})">🧾 Factura</button>
+          <button class="btn-rastrear-orden" onclick="rastrearDesdeHistorial(${i})" style="background:rgb(91,91,229);">🚚 Rastrear</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ── RF6: FACTURA ── */
+function verFactura(idx) {
+  const venta = historial[idx];
+  if (!venta) return;
+  const html = KK.generarFacturaHTML(venta);
+  const win  = window.open('', '_blank');
+  win.document.write(html);
+  win.document.close();
+}
+
+/* ── RASTREO ── */
+function rastrearDesdeHistorial(idx) {
+  const orden = historial[idx];
+  if (!orden) return;
+  document.getElementById('inputPedido').value = orden.id;
+  mostrarTab('rastreo', null);
+  simularRastreo(orden.id, orden);
+}
+
+function renderRecientes() {
+  const lista  = document.getElementById('recientesLista');
+  const vacio  = document.getElementById('recientesVacio');
+  if (!historial.length) { lista.innerHTML=''; vacio.style.display='flex'; return; }
+  vacio.style.display='none';
+  lista.innerHTML = historial.slice(0,3).map((orden,i) => `
+    <div class="reciente-row">
+      <span class="reciente-codigo">${orden.id}</span>
+      <span class="reciente-fecha">${orden.fecha}</span>
+      <span class="reciente-total">$${Number(orden.total).toFixed(2)}</span>
+      <button class="btn-rastrear-mini" onclick="rastrearDesdeHistorial(${i})">Rastrear</button>
+    </div>
+  `).join('');
+}
+
+function rastrearPedido() {
+  const codigo = document.getElementById('inputPedido').value.trim();
+  if (!codigo) return;
+  const orden = historial.find(h => h.id === codigo);
+  if (orden) { simularRastreo(codigo, orden); return; }
+  document.getElementById('rastreoResultado').style.display='none';
+  document.getElementById('rastreoError').style.display='flex';
+}
+
+function simularRastreo(codigo, orden) {
+  document.getElementById('rastreoError').style.display='none';
+  document.getElementById('rastreoResultado').style.display='block';
+  document.getElementById('rastreoNum').textContent = 'Pedido: ' + codigo;
+
+  const estados  = ['confirmado','preparacion','camino','entregado'];
+  const estadoIdx = Math.min(3, Math.floor(Math.random() * 2) + 2);
+  const etiquetas = ['✅ Confirmado','📦 En preparación','🚚 En camino','🏠 Entregado'];
+  document.getElementById('rastreoEstado').textContent = etiquetas[estadoIdx];
+  document.getElementById('rastreoEstado').className   = 'rastreo-estado estado-' + estados[estadoIdx];
+
+  ['step1','step2','step3','step4'].forEach((s,i) => {
+    const el = document.getElementById(s);
+    if (i <= estadoIdx) {
+      el.classList.add('activo');
+      document.getElementById(s+'fecha').textContent = orden.fecha;
+    } else {
+      el.classList.remove('activo');
+      document.getElementById(s+'fecha').textContent = 'Pendiente';
+    }
+  });
+
+  const mensajes = {
+    0: 'Tu pedido fue recibido y está siendo procesado.',
+    1: 'Estamos empacando tu pedido con mucho cuidado.',
+    2: '¡Tu pedido ya está en camino! Llegará pronto.',
+    3: '¡Tu pedido fue entregado! Esperamos que lo disfrutes. 🎉'
+  };
+  document.getElementById('rastreoMensaje').textContent = mensajes[estadoIdx];
+}
+
+/* ── ADMIN ── */
+function renderAdmin() {
+  const reporte = KK.getReporte();
+
+  // Métricas
+  document.getElementById('reporteMetricas').innerHTML = `
+    <div style="background:#f7f8ff;border-radius:16px;padding:20px;text-align:center;">
+      <div style="font-size:28px;font-weight:700;color:rgb(221,33,71);">${reporte.totalVentas}</div>
+      <div style="font-size:13px;color:#888;margin-top:4px;">Total de ventas</div>
+    </div>
+    <div style="background:#f7f8ff;border-radius:16px;padding:20px;text-align:center;">
+      <div style="font-size:28px;font-weight:700;color:rgb(91,91,229);">$${reporte.totalIngresos.toFixed(2)}</div>
+      <div style="font-size:13px;color:#888;margin-top:4px;">Ingresos totales</div>
+    </div>
+    <div style="background:#f7f8ff;border-radius:16px;padding:20px;text-align:center;">
+      <div style="font-size:18px;font-weight:700;color:#2a7a2a;">${reporte.topProducto ? reporte.topProducto[0] : '—'}</div>
+      <div style="font-size:13px;color:#888;margin-top:4px;">Producto más vendido</div>
+    </div>`;
+
+  // Productos vendidos
+  const prods = Object.entries(reporte.prodsVendidos).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  document.getElementById('reporteProductos').innerHTML = prods.length
+    ? prods.map(([n,c]) => `
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;">
+          <span>${n}</span><strong style="color:rgb(91,91,229);">${c} uds.</strong>
+        </div>`).join('')
+    : '<p style="color:#aaa;font-size:14px;">Sin ventas aún.</p>';
+
+  // Cupones
+  renderCupones();
+
+  // Inventario (RD6)
+  document.getElementById('tablaInventario').innerHTML = `
+    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <thead><tr style="background:rgb(91,91,229);color:#fff;">
+        <th style="padding:10px;text-align:left;border-radius:8px 0 0 0;">Producto</th>
+        <th style="padding:10px;text-align:center;">Categoría</th>
+        <th style="padding:10px;text-align:center;">Precio</th>
+        <th style="padding:10px;text-align:center;border-radius:0 8px 0 0;">Stock</th>
+      </tr></thead>
+      <tbody>
+        ${KK.productos.map(p => `
+          <tr style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:10px;">${p.nombre}</td>
+            <td style="padding:10px;text-align:center;color:#888;">${p.categoria}</td>
+            <td style="padding:10px;text-align:center;color:rgb(91,91,229);font-weight:700;">$${p.precio}</td>
+            <td style="padding:10px;text-align:center;">
+              <span style="background:${p.stock <= 3 ? '#fff3f0' : '#efffef'};color:${p.stock <= 3 ? '#d44' : '#2a7a2a'};padding:4px 12px;border-radius:12px;font-weight:700;">${p.stock}</span>
+            </td>
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+
+  // Ventas completas
+  const todas = KK.getHistorial();
+  document.getElementById('adminVentas').innerHTML = todas.length
+    ? todas.map(v => `
+        <div style="border:1.5px solid #eef0ff;border-radius:14px;padding:14px 18px;margin-bottom:12px;font-size:13px;">
+          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+            <strong>${v.id}</strong>
+            <span style="color:#888;">${v.fecha}</span>
+            <span style="color:#888;">Pago: ${v.metodoPago}</span>
+            <strong style="color:rgb(221,33,71);">Total: $${Number(v.total).toFixed(2)}</strong>
+          </div>
+          <div style="color:#888;">Cliente: ${v.envioInfo?.nombre || '—'} ${v.envioInfo?.apellido || ''} · ${v.envioInfo?.email || ''}</div>
+          <div style="color:#888;">Envío a: ${v.envioInfo?.ciudad || '—'}, ${v.envioInfo?.departamento || ''}</div>
+        </div>`).join('')
+    : '<p style="color:#aaa;">No hay ventas registradas.</p>';
+}
+
+function renderCupones() {
+  const cupones = KK.getCupones();
+  document.getElementById('listaCupones').innerHTML = Object.entries(cupones).map(([c,p]) =>
+    `<span class="cupon-tag">${c} – ${p}% <button onclick="borrarCupon('${c}')">✕</button></span>`
+  ).join('') || '<p style="color:#aaa;font-size:13px;">Sin cupones activos.</p>';
+}
+
+function agregarCuponAdmin() {
+  const codigo = document.getElementById('nuevoCuponCodigo').value.trim();
+  const pct    = document.getElementById('nuevoCuponPct').value;
+  if (!codigo || !pct || pct < 1 || pct > 99) { alert('Código y porcentaje válidos (1–99)'); return; }
+  KK.agregarCupon(codigo, pct);
+  document.getElementById('nuevoCuponCodigo').value = '';
+  document.getElementById('nuevoCuponPct').value    = '';
+  renderCupones();
+}
+
+function borrarCupon(codigo) {
+  KK.eliminarCupon(codigo);
+  renderCupones();
+}
+
+if (window.location.hash === '#rastreo') {
+  setTimeout(() => mostrarTab('rastreo', document.getElementById('tabRastreo')), 100);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link rel="stylesheet" href="CSS/productos.css">
+  <title>Koko - Productos</title>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg koko-nav">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand koko-logo" href="productos.html">Koko</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link active" href="productos.html">Productos</a></li>
+        <li class="nav-item"><a class="nav-link" href="quienes-somos.html">Quiénes somos</a></li>
+        <li class="nav-item"><a class="nav-link" href="https://wa.me/3192858588?text=Hola%2C%20quiero%20contactarme%20con%20Koko" target="_blank">Contáctanos</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="navUsuario">
+            👤 Mi cuenta
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end koko-dropdown">
+            <li><a class="dropdown-item" href="perfil.html">👤 Mi perfil</a></li>
+            <li><a class="dropdown-item" href="perfil.html#rastreo">📦 Rastrear pedido</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#" id="btnCerrarSesion">🚪 Cerrar sesión</a></li>
+          </ul>
+        </li>
+      </ul>
+      <form class="d-flex me-3" role="search" onsubmit="return false;">
+        <input class="form-control koko-search me-2" type="search" placeholder="Buscar productos..." id="searchInput">
+      </form>
+      <button class="cart-btn" id="cartToggle">
+        🛒 <span class="cart-badge" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- OVERLAY y PANEL CARRITO -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-panel" id="cartPanel">
+  <div class="cart-panel-header">
+    <span>🛒 Mi Carrito</span>
+    <button class="cart-close-btn" id="cartClose">✕</button>
+  </div>
+  <div class="cart-tabs">
+    <button class="cart-tab active" id="tabCarrito" onclick="switchTab('carrito')">Carrito</button>
+    <button class="cart-tab" id="tabHistorial" onclick="switchTab('historial')">Historial</button>
+  </div>
+
+  <!-- Tab Carrito -->
+  <div class="cart-content" id="contentCarrito">
+    <div id="cartItems" class="cart-items-list"></div>
+    <div class="cart-empty" id="cartEmpty">
+      <span>😢</span>
+      <p>Tu carrito está vacío</p>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none;">
+      <div class="cart-total">Total: <strong id="cartTotal">$0.00</strong></div>
+      <button class="btn-comprar" onclick="comprar()">Comprar ahora</button>
+      <button class="btn-vaciar" onclick="vaciarCarritoUI()">Vaciar carrito</button>
+    </div>
+  </div>
+
+  <!-- Tab Historial -->
+  <div class="cart-content" id="contentHistorial" style="display:none;">
+    <div id="historialItems" class="cart-items-list"></div>
+    <div class="cart-empty" id="historialEmpty">
+      <span>📦</span>
+      <p>Aún no tienes compras anteriores</p>
+    </div>
+  </div>
+</aside>
+
+<!-- TOAST -->
+<div class="koko-toast" id="kokoToast"></div>
+
+<!-- CATÁLOGO -->
+<main class="products container">
+  <h2>Productos</h2>
+  <p>
+    Si queremos pensar la cultura japonesa contemporánea, no podemos ignorar
+    a la cultura otaku. Lo que la constituye es particularmente claro en esta
+    cultura juvenil en perpetuo crecimiento desde los años 80 en Japón.
+  </p>
+
+  <div class="filtros">
+    <button class="filtro-btn active" onclick="filtrar('todos', this)">Todos</button>
+    <button class="filtro-btn" onclick="filtrar('figuras', this)">Figuras</button>
+    <button class="filtro-btn" onclick="filtrar('ropa', this)">Ropa</button>
+    <button class="filtro-btn" onclick="filtrar('humidificadores', this)">Humidificadores</button>
+    <button class="filtro-btn" onclick="filtrar('pantuflas', this)">Pantuflas</button>
+    <button class="filtro-btn" onclick="filtrar('peluches', this)">Peluches</button>
+  </div>
+
+  <!-- Grid generado dinámicamente desde KK.productos (RD1, RD6) -->
+  <div class="product-info" id="productGrid"></div>
+</main>
+
+<!-- WhatsApp -->
+<div class="container-boton">
+  <a href="https://wa.me/3192858588?text=Buen%20día%2C%20gracias%20por%20contactarte%20con%20nosotros" target="_blank">
+    <img class="boton" src="imagenes/whatsapp.png" alt="WhatsApp">
+  </a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="JS/koko.js"></script>
+<script>
+// RF0 – Verificar sesión
+KK.requireAuth();
+KK.initNavbar('btnCerrarSesion');
+
+/* ── RENDERIZAR CATÁLOGO (RF1, RD1, RD4, RD6) ── */
+function renderCatalogo(lista) {
+  const grid = document.getElementById('productGrid');
+  if (!lista.length) { grid.innerHTML = '<p style="color:#999;grid-column:1/-1;text-align:center;padding:60px 0;">No hay productos con ese filtro.</p>'; return; }
+  grid.innerHTML = lista.map(p => {
+    const sinStock = p.stock <= 0;
+    const stockBadge = p.stock <= 3 && p.stock > 0
+      ? `<span style="position:absolute;top:10px;left:10px;background:coral;color:#fff;border-radius:12px;padding:3px 10px;font-size:11px;font-weight:700;">¡Últimas ${p.stock}!</span>`
+      : '';
+    return `
+    <div class="product" data-categoria="${p.categoria}" data-id="${p.id}" ${sinStock ? 'style="opacity:.6;"' : ''}>
+      <div class="product-img-wrap">
+        <img src="${p.img}" alt="${p.nombre}" loading="lazy">
+        <button class="btn-wish" onclick="toggleWish(this)">♡</button>
+        ${stockBadge}
+      </div>
+      <h3>${p.nombre}</h3>
+      <p>${p.desc}</p>
+      <div class="product-bottom">
+        <span class="precio">$${p.precio.toFixed(2)}</span>
+        ${sinStock
+          ? `<span style="background:#eee;color:#999;border-radius:18px;padding:8px 16px;font-size:13px;font-weight:700;">Sin stock</span>`
+          : `<button class="btn-agregar" onclick="agregarUI('${p.id}','${p.nombre.replace(/'/g,"\\'")}')">+ Carrito</button>`
+        }
+      </div>
+    </div>`;
+  }).join('');
+}
+
+renderCatalogo(KK.productos);
+
+/* ── CARRITO UI ── */
+function agregarUI(id, nombre) {
+  const ok = KK.agregarAlCarrito(id);
+  if (ok) {
+    actualizarUI();
+    mostrarToast('✅ ' + nombre + ' agregado al carrito');
+    abrirCarrito();
+  } else {
+    mostrarToast('❌ Producto sin stock disponible');
+  }
+}
+
+function vaciarCarritoUI() { KK.vaciarCarrito(); actualizarUI(); }
+
+function comprar() {
+  if (KK.getCarrito().length === 0) return;
+  window.location.href = 'pago.html';
+}
+
+function calcularTotal() { return KK.totalCarrito().toFixed(2); }
+
+function actualizarUI() {
+  const carrito = KK.getCarrito();
+  const count = carrito.reduce((s,p) => s + p.cantidad, 0);
+  document.getElementById('cartCount').textContent = count;
+  renderCarrito(carrito);
+}
+
+function renderCarrito(carrito) {
+  const lista  = document.getElementById('cartItems');
+  const empty  = document.getElementById('cartEmpty');
+  const footer = document.getElementById('cartFooter');
+  if (!carrito.length) { lista.innerHTML=''; empty.style.display='flex'; footer.style.display='none'; return; }
+  empty.style.display='none'; footer.style.display='block';
+  lista.innerHTML = carrito.map(p => `
+    <div class="cart-item">
+      <img src="${p.img}" alt="${p.nombre}" class="cart-item-img">
+      <div class="cart-item-info">
+        <p class="cart-item-name">${p.nombre}</p>
+        <p class="cart-item-price">$${p.precio.toFixed(2)}</p>
+        <div class="cart-qty-ctrl">
+          <button onclick="cambiarUI('${p.id}',-1)">−</button>
+          <span>${p.cantidad}</span>
+          <button onclick="cambiarUI('${p.id}',1)">+</button>
+        </div>
+      </div>
+      <button class="cart-item-del" onclick="eliminarUI('${p.id}')">🗑</button>
+    </div>
+  `).join('');
+  document.getElementById('cartTotal').textContent = '$' + calcularTotal();
+}
+
+function cambiarUI(id, delta) { KK.cambiarCantidad(id, delta); actualizarUI(); }
+function eliminarUI(id)       { KK.eliminarDelCarrito(id); actualizarUI(); }
+
+/* ── HISTORIAL EN PANEL ── */
+function renderHistorial() {
+  const historial = KK.getHistorial();
+  const lista  = document.getElementById('historialItems');
+  const empty  = document.getElementById('historialEmpty');
+  if (!historial.length) { lista.innerHTML=''; empty.style.display='flex'; return; }
+  empty.style.display='none';
+  lista.innerHTML = historial.map((orden,i) => `
+    <div class="historial-orden">
+      <div class="historial-header">
+        <span class="historial-fecha">📅 ${orden.fecha}</span>
+        <span class="historial-total">Total: <strong>$${Number(orden.total).toFixed(2)}</strong></span>
+      </div>
+      ${orden.items.map(p => `
+        <div class="cart-item mini">
+          <img src="${p.img}" alt="${p.nombre}" class="cart-item-img">
+          <div class="cart-item-info">
+            <p class="cart-item-name">${p.nombre}</p>
+            <p class="cart-item-price">$${p.precio.toFixed(2)} × ${p.cantidad}</p>
+          </div>
+          <button class="btn-recomprar" onclick="recomprar('${p.id}')">+ Agregar</button>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function recomprar(id) { agregarUI(id, KK.productos.find(p=>p.id===id)?.nombre || ''); switchTab('carrito'); }
+
+/* ── PANEL ── */
+function abrirCarrito()  { document.getElementById('cartPanel').classList.add('open'); document.getElementById('cartOverlay').classList.add('open'); }
+function cerrarCarrito() { document.getElementById('cartPanel').classList.remove('open'); document.getElementById('cartOverlay').classList.remove('open'); }
+
+document.getElementById('cartToggle').addEventListener('click', () =>
+  document.getElementById('cartPanel').classList.contains('open') ? cerrarCarrito() : abrirCarrito());
+document.getElementById('cartClose').addEventListener('click', cerrarCarrito);
+document.getElementById('cartOverlay').addEventListener('click', cerrarCarrito);
+
+function switchTab(tab) {
+  document.getElementById('contentCarrito').style.display   = tab==='carrito'   ? 'flex' : 'none';
+  document.getElementById('contentHistorial').style.display = tab==='historial' ? 'flex' : 'none';
+  document.getElementById('tabCarrito').classList.toggle('active', tab==='carrito');
+  document.getElementById('tabHistorial').classList.toggle('active', tab==='historial');
+  if (tab==='historial') renderHistorial();
+}
+
+/* ── TOAST ── */
+function mostrarToast(msg) {
+  const t = document.getElementById('kokoToast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ── FAVORITOS ── */
+function toggleWish(btn) {
+  btn.classList.toggle('activo');
+  btn.textContent = btn.classList.contains('activo') ? '♥' : '♡';
+}
+
+/* ── FILTROS ── */
+function filtrar(cat, btn) {
+  document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const lista = cat === 'todos' ? KK.productos : KK.productos.filter(p => p.categoria === cat);
+  renderCatalogo(lista);
+}
+
+/* ── BÚSQUEDA ── */
+document.getElementById('searchInput').addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  const lista = q ? KK.productos.filter(p => p.nombre.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q)) : KK.productos;
+  renderCatalogo(lista);
+});
+
+actualizarUI();
+</script>
+</body>
+</html>

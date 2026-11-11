@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KOKO – ¿Quiénes somos?</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="CSS/quienes-somos.css"/>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar navbar-expand-lg bg-white shadow-sm" style="position:sticky;top:0;z-index:1100;">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand koko-brand" href="productos.html">KOKO</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent" aria-expanded="false">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="productos.html">Productos</a></li>
+          <li class="nav-item"><a class="nav-link active" href="quienes-somos.html">Quiénes somos</a></li>
+          <li class="nav-item"><a class="nav-link" href="https://wa.me/3192858588?text=Hola%2C%20quiero%20contactarme%20con%20Koko" target="_blank">Contáctanos</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="navUsuarioQS">
+              👤 Mi cuenta
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="perfil.html">👤 Mi perfil</a></li>
+              <li><a class="dropdown-item" href="perfil.html#rastreo">📦 Rastrear pedido</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="#" id="btnCerrarSesionQS">🚪 Cerrar sesión</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="qs-hero">
+    <div class="qs-hero__bg-text">KOKO</div>
+    <div class="qs-hero__content">
+      <span class="qs-hero__tag">✦ Nuestra historia</span>
+      <h1 class="qs-hero__title">Donde el anime<br/><em>cobra vida</em></h1>
+      <p class="qs-hero__sub">
+        Somos una tienda colombiana apasionada por la cultura otaku,
+        dedicada a acercar los mejores productos del mundo del anime
+        a cada rincón del país.
+      </p>
+      <a href="#historia" class="qs-btn">Conoce más ↓</a>
+    </div>
+    <div class="qs-hero__deco">
+      <div class="deco-ring deco-ring--1"></div>
+      <div class="deco-ring deco-ring--2"></div>
+      <div class="deco-ring deco-ring--3"></div>
+      <div class="deco-emoji">⚡</div>
+    </div>
+  </section>
+
+  <!-- HISTORIA -->
+  <section class="qs-section" id="historia">
+    <div class="qs-container">
+      <div class="qs-split">
+        <div class="qs-split__text">
+          <span class="qs-label">01 — Origen</span>
+          <h2>Nacimos del amor<br/>por el anime</h2>
+          <p>
+            KOKO nació en 2021 en Medellín, Antioquia, como un pequeño
+            emprendimiento impulsado por un grupo de amigos fanáticos del anime.
+            Lo que comenzó vendiendo figuras coleccionables en redes sociales
+            se convirtió rápidamente en una tienda con cientos de productos
+            y miles de clientes felices en todo Colombia.
+          </p>
+          <p>
+            Nuestro nombre <strong>KOKO</strong> es un guiño a la cultura japonesa:
+            significa <em>aquí</em> (ここ), porque queremos que cada fanático
+            sienta que su tienda favorita está siempre cerca.
+          </p>
+        </div>
+        <div class="qs-split__visual">
+          <div class="qs-card-float">
+            <div class="qs-card-float__year">2021</div>
+            <div class="qs-card-float__label">Año de fundación</div>
+          </div>
+          <div class="qs-card-float qs-card-float--alt">
+            <div class="qs-card-float__year">+5K</div>
+            <div class="qs-card-float__label">Clientes felices</div>
+          </div>
+          <div class="qs-card-float qs-card-float--sm">
+            <div class="qs-card-float__year">🇨🇴</div>
+            <div class="qs-card-float__label">Envíos nacionales</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALORES -->
+  <section class="qs-section qs-section--dark">
+    <div class="qs-container">
+      <div class="qs-section__header">
+        <span class="qs-label qs-label--light">02 — Lo que nos mueve</span>
+        <h2>Nuestros valores</h2>
+      </div>
+      <div class="qs-values">
+
+        <div class="qs-value-card">
+          <div class="qs-value-card__icon">🎌</div>
+          <h3>Pasión auténtica</h3>
+          <p>Cada producto que ofrecemos lo elegimos porque nosotros mismos
+             somos fans. No vendemos cualquier cosa, vendemos lo que amamos.</p>
+        </div>
+
+        <div class="qs-value-card">
+          <div class="qs-value-card__icon">📦</div>
+          <h3>Calidad garantizada</h3>
+          <p>Trabajamos solo con proveedores verificados para asegurarnos
+             de que cada figura, prenda o accesorio llegue en perfectas condiciones.</p>
+        </div>
+
+        <div class="qs-value-card">
+          <div class="qs-value-card__icon">💜</div>
+          <h3>Comunidad primero</h3>
+          <p>Más que una tienda, somos una comunidad. Organizamos eventos,
+             concursos de cosplay y coleccionamos las opiniones de nuestra familia otaku.</p>
+        </div>
+
+        <div class="qs-value-card">
+          <div class="qs-value-card__icon">🚀</div>
+          <h3>Envío rápido</h3>
+          <p>Entendemos la emoción de esperar tu pedido, por eso procesamos
+             y despachamos en menos de 48 horas a todo Colombia.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EQUIPO -->
+  <section class="qs-section" id="equipo">
+    <div class="qs-container">
+      <div class="qs-section__header">
+        <span class="qs-label">03 — Las personas detrás</span>
+        <h2>Nuestro equipo</h2>
+      </div>
+      <div class="qs-team">
+
+        <div class="qs-team-card">
+          <div class="qs-team-card__avatar">🧑‍💻</div>
+          <h3>Daniela R.</h3>
+          <span class="qs-team-card__role">Fundadora & Directora</span>
+          <p>Fan de Sailor Moon desde los 8 años. Convirtió su colección
+             personal en el catálogo de KOKO.</p>
+        </div>
+
+        <div class="qs-team-card">
+          <div class="qs-team-card__avatar">👩‍🎨</div>
+          <h3>Valentina M.</h3>
+          <span class="qs-team-card__role">Diseño & Redes sociales</span>
+          <p>Cosplayer apasionada y la mente creativa detrás de los
+             diseños exclusivos de la tienda.</p>
+        </div>
+
+        <div class="qs-team-card">
+          <div class="qs-team-card__avatar">👨‍💼</div>
+          <h3>Sebastián G.</h3>
+          <span class="qs-team-card__role">Logística & Envíos</span>
+          <p>El responsable de que tu pedido llegue impecable y a tiempo.
+             Fan número uno de Dragon Ball Z.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section class="qs-section qs-section--accent" id="contacto">
+    <div class="qs-container">
+      <div class="qs-contact">
+        <div class="qs-contact__text">
+          <span class="qs-label qs-label--light">04 — Háblanos</span>
+          <h2>¿Tienes alguna<br/>pregunta?</h2>
+          <p>Estamos disponibles de lunes a sábado de 9 am a 7 pm.
+             ¡Nos encanta hablar de anime tanto como a ti!</p>
+          <div class="qs-contact__links">
+            <a href="https://wa.me/3192858588" target="_blank" class="qs-contact-btn qs-contact-btn--wa">
+              <span>💬</span> WhatsApp
+            </a>
+            <a href="https://www.tiktok.com" target="_blank" class="qs-contact-btn qs-contact-btn--tk">
+              <span>🎵</span> TikTok
+            </a>
+          </div>
+          <p class="qs-contact__email">📧 kokotienda@correo.com</p>
+          <p class="qs-contact__address">📍 Medellín, Antioquia – Colombia</p>
+        </div>
+        <div class="qs-contact__deco">
+          <div class="qs-bubble">¡Hola! 👋</div>
+          <div class="qs-bubble qs-bubble--alt">¿En qué te ayudamos? 🎌</div>
+          <div class="qs-bubble qs-bubble--sm">Pedidos, cambios, todo 💜</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="qs-footer">
+    <div class="qs-container">
+      <span class="qs-footer__logo">KOKO</span>
+      <p>© 2025 KOKO Store · Medellín, Colombia · Hecho con 💜 para la comunidad otaku</p>
+      <a href="productos.html" class="qs-footer__link">← Volver a productos</a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script><script src="JS/koko.js"></script>
+  <script>
+    const session = localStorage.getItem("kk_session");
+    if(session !== "activa"){ window.location.href = "inicioSesion.html"; }
+    const user = localStorage.getItem("kk_logueado");
+    const nav = document.getElementById("navUsuarioQS");
+    if(user && nav){ nav.textContent = "👤 " + user; }
+    document.getElementById("btnCerrarSesionQS").addEventListener("click", function(e){
+      e.preventDefault();
+      localStorage.removeItem("kk_session");
+      localStorage.removeItem("kk_logueado");
+      window.location.href = "inicioSesion.html";
+    });
+  </script>
+</body>
+</html>

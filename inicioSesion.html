@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koko – Iniciar sesión</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="CSS/auth.css">
+</head>
+<body>
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+
+    <a href="koko.html" class="auth-logo">Koko</a>
+    <p class="auth-sub">Bienvenido de vuelta 👋 Accede a tu cuenta</p>
+
+    <form id="loginForm">
+      <div class="auth-field">
+        <label>Correo electrónico</label>
+        <input type="email" id="email" placeholder="ejemplo@correo.com" required>
+      </div>
+      <div class="auth-field">
+        <label>Contraseña</label>
+        <input type="password" id="password" placeholder="Tu contraseña" required>
+        <div class="auth-check" style="margin-top:8px;">
+          <input type="checkbox" id="mostrar">
+          <label for="mostrar">Mostrar contraseña</label>
+        </div>
+      </div>
+
+      <button type="submit" class="auth-btn-primary">Iniciar sesión</button>
+      <a href="registro.html" class="auth-btn-secondary">No tengo cuenta – Registrarme</a>
+
+      <div class="auth-olvide">
+        <a href="#">¿Olvidaste tu contraseña?</a>
+      </div>
+    </form>
+
+    <!-- Acceso rápido de demo -->
+    <div style="margin-top:16px;padding:12px 16px;background:#f7f8ff;border-radius:14px;font-size:13px;color:#888;text-align:left;">
+      <strong style="color:#555;">🔑 Demo rápido:</strong> Si no tienes cuenta, 
+      <a href="registro.html" style="color:rgb(91,91,229);font-weight:600;">regístrate primero</a>.
+    </div>
+
+    <div class="auth-msg" id="authMsg"></div>
+  </div>
+</div>
+
+<script src="JS/koko.js"></script>
+<script>
+document.getElementById("mostrar").addEventListener("change", function(){
+  document.getElementById("password").type = this.checked ? "text" : "password";
+});
+
+document.getElementById("loginForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const email = document.getElementById("email").value.trim();
+  const pass  = document.getElementById("password").value;
+  const msg   = document.getElementById("authMsg");
+
+  // RF0: Autenticación verificando contra hash almacenado
+  if (KK.login(email, pass)) {
+    msg.textContent = "✅ ¡Bienvenido! Redirigiendo...";
+    msg.className = "auth-msg success";
+    setTimeout(() => window.location.href = "inicio.html", 1200);
+  } else {
+    msg.textContent = "❌ Correo o contraseña incorrectos. Verifica tus datos o regístrate.";
+    msg.className = "auth-msg error";
+  }
+});
+</script>
+
+</body>
+</html>

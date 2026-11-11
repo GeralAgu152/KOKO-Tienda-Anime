@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KOKO – Checkout</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="CSS/pago.css"/>
+</head>
+<body>
+
+<nav class="checkout-nav">
+  <a class="nav-back" href="productos.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
+      <path d="M19 12H5M12 5l-7 7 7 7"/>
+    </svg>
+    Volver a la tienda
+  </a>
+  <span class="nav-logo">Koko</span>
+  <div class="nav-steps">
+    <span class="step active">Pago</span>
+    <span class="step-sep">›</span>
+    <span class="step">Confirmación</span>
+  </div>
+</nav>
+
+<div class="checkout-wrap">
+
+  <div class="left-col">
+
+    <div class="card-section">
+      <div class="section-title"><span class="section-icon">📬</span> Información de contacto</div>
+      <div class="field-row">
+        <div class="field"><label>Nombre</label><input type="text" id="firstName" placeholder="Sakura" autocomplete="given-name"/></div>
+        <div class="field"><label>Apellido</label><input type="text" id="lastName" placeholder="García" autocomplete="family-name"/></div>
+      </div>
+      <div class="field"><label>Correo electrónico</label><input type="email" id="email" placeholder="tu@correo.com" autocomplete="email"/></div>
+      <div class="field"><label>Teléfono</label><input type="tel" id="phone" placeholder="+57 300 000 0000" autocomplete="tel"/></div>
+    </div>
+
+    <div class="card-section">
+      <div class="section-title"><span class="section-icon">🚚</span> Dirección de envío (RD3)</div>
+      <div class="field"><label>Dirección</label><input type="text" id="address" placeholder="Calle 45 # 23-10" autocomplete="street-address"/></div>
+      <div class="field-row">
+        <div class="field"><label>Ciudad</label><input type="text" id="city" placeholder="Medellín" autocomplete="address-level2"/></div>
+        <div class="field"><label>Departamento</label>
+          <select id="state">
+            <option value="">Seleccionar...</option>
+            <option>Antioquia</option><option>Cundinamarca</option><option>Valle del Cauca</option>
+            <option>Atlántico</option><option>Bolívar</option><option>Santander</option><option>Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Código postal</label><input type="text" id="zip" placeholder="050001" maxlength="6"/></div>
+        <div class="field"><label>País</label>
+          <select id="country">
+            <option value="Colombia" selected>🇨🇴 Colombia</option>
+            <option value="México">🇲🇽 México</option>
+            <option value="Argentina">🇦🇷 Argentina</option>
+            <option value="Chile">🇨🇱 Chile</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-section">
+      <div class="section-title"><span class="section-icon">💳</span> Método de pago (RF3)</div>
+      <div class="payment-methods">
+        <label class="pay-method selected" id="pm-card" onclick="selectMethod('card')">
+          <input type="radio" name="payment" value="Tarjeta de crédito/débito" checked/>
+          <span class="pm-icon">💳</span><span class="pm-label">Tarjeta</span>
+        </label>
+        <label class="pay-method" id="pm-nequi" onclick="selectMethod('nequi')">
+          <input type="radio" name="payment" value="Nequi"/>
+          <span class="pm-icon">🟣</span><span class="pm-label">Nequi</span>
+        </label>
+        <label class="pay-method" id="pm-transfer" onclick="selectMethod('transfer')">
+          <input type="radio" name="payment" value="Transferencia bancaria"/>
+          <span class="pm-icon">🏦</span><span class="pm-label">Transferencia</span>
+        </label>
+      </div>
+
+      <div class="tab-panel active" id="panel-card">
+        <div class="card-visual">
+          <div class="chip"><div class="chip-lines"><div class="chip-line"></div><div class="chip-line"></div><div class="chip-line"></div><div class="chip-line"></div></div></div>
+          <div class="card-number-display" id="display-number">
+            <span class="group">••••</span><span class="group">••••</span><span class="group">••••</span><span class="group">••••</span>
+          </div>
+          <div class="card-bottom">
+            <div><div class="card-holder-label">Titular</div><div class="card-holder-name" id="display-name">NOMBRE APELLIDO</div></div>
+            <div><div class="card-exp-label">Vence</div><div class="card-exp-val" id="display-exp">MM/AA</div></div>
+            <div class="card-brand" id="display-brand">💳</div>
+          </div>
+        </div>
+        <div class="field"><label>Número de tarjeta</label><input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric" autocomplete="cc-number"/></div>
+        <div class="field"><label>Nombre en la tarjeta</label><input type="text" id="cardName" placeholder="NOMBRE APELLIDO" autocomplete="cc-name"/></div>
+        <div class="field-row">
+          <div class="field"><label>Vencimiento</label><input type="text" id="cardExp" placeholder="MM/AA" maxlength="5" autocomplete="cc-exp"/></div>
+          <div class="field"><label>CVV</label><input type="text" id="cardCvv" placeholder="•••" maxlength="4" inputmode="numeric" autocomplete="cc-csc"/></div>
+        </div>
+        <div class="field"><label>Cuotas</label>
+          <select id="installments">
+            <option value="1">1 cuota – sin interés</option><option value="3">3 cuotas</option>
+            <option value="6">6 cuotas</option><option value="12">12 cuotas</option><option value="24">24 cuotas</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="panel-nequi">
+        <div class="transfer-info">
+          <div class="wallet-info">
+            <div class="wallet-logo">🟣</div>
+            <div class="wallet-number">319 285 8588</div>
+            <div class="wallet-name">KOKO Store · Nequi</div>
+            <div class="wallet-qr">📱</div>
+            <p class="text-muted font-small mt-12">Escanea el QR o transfiere al número indicado.<br/>Envía el comprobante por WhatsApp para confirmar tu pedido.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="panel-transfer">
+        <div class="transfer-info">
+          <div class="transfer-row"><span class="t-label">Banco</span><span class="t-val">Bancolombia <button class="copy-btn" onclick="copyText('Bancolombia')">copiar</button></span></div>
+          <div class="transfer-row"><span class="t-label">Tipo de cuenta</span><span class="t-val">Ahorros</span></div>
+          <div class="transfer-row"><span class="t-label">N° de cuenta</span><span class="t-val">123-456789-00 <button class="copy-btn" onclick="copyText('12345678900')">copiar</button></span></div>
+          <div class="transfer-row"><span class="t-label">Titular</span><span class="t-val">KOKO Store S.A.S.</span></div>
+          <div class="transfer-row"><span class="t-label">NIT</span><span class="t-val">900.123.456-7</span></div>
+          <p class="text-muted font-small mt-12">Envía el comprobante al WhatsApp <strong>+57 319 285 8588</strong> con tu número de orden.</p>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-pay" id="btnPay" onclick="procesarPago()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline-block;vertical-align:-3px;margin-right:8px">
+        <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+      </svg>
+      Pagar ahora – <span id="btn-total">$0.00</span>
+    </button>
+    <p class="text-center text-muted font-small mt-12">🔒 Pago 100% seguro · Datos encriptados con SSL</p>
+
+  </div>
+
+  <div class="order-summary">
+    <div class="summary-card">
+      <div class="summary-header">Tu pedido</div>
+      <div class="summary-items" id="summaryItems"></div>
+      <div class="coupon-wrap">
+        <input type="text" id="couponInput" placeholder="Código de descuento"/>
+        <button class="btn-coupon" onclick="aplicarCupon()">Aplicar</button>
+      </div>
+      <!-- RD2: desglose con IVA explícito -->
+      <div class="summary-totals">
+        <div class="total-row"><span>Subtotal</span><span id="subtotal-val">$0.00</span></div>
+        <div class="total-row"><span>IVA (19%)</span><span id="iva-val">$0.00</span></div>
+        <div class="total-row"><span>Envío</span><span id="envio-val">$0.00</span></div>
+        <div class="total-row" id="discount-row" style="display:none;"><span>Descuento</span><span id="discount-val">–$0.00</span></div>
+        <div class="total-row grand"><span>Total</span><span id="grand-total">$0.00</span></div>
+      </div>
+      <div class="secure-badges">
+        <div class="badge-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Compra segura</div>
+        <div class="badge-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Visa / MC</div>
+        <div class="badge-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>30 días devolución</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal de éxito -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-box">
+    <div class="success-circle">✓</div>
+    <h2>¡Pago exitoso!</h2>
+    <p>Tu pedido ha sido confirmado. Recibirás un correo con los detalles y el seguimiento de tu envío.</p>
+    <div class="order-id" id="order-id-display">KOKO-000000</div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn-continue" onclick="descargarFactura()">🧾 Ver factura</button>
+      <button class="btn-continue" style="background:rgb(91,91,229);" onclick="finalizarCompra()">Seguir comprando 🛍️</button>
+    </div>
+  </div>
+</div>
+
+<script src="JS/koko.js"></script>
+<script>
+KK.requireAuth();
+
+const ENVIO = 12000;
+let descuentoAplicado = 0;
+let ventaActual = null;
+
+function getSubtotal() { return KK.totalCarrito(); }
+function getIVA()      { return Math.round(getSubtotal() * 0.19); }
+function getTotal()    { return getSubtotal() + (KK.getCarrito().length > 0 ? ENVIO : 0) - descuentoAplicado; }
+
+function renderResumen() {
+  const carrito = KK.getCarrito();
+  const lista = document.getElementById('summaryItems');
+  if (!carrito.length) {
+    lista.innerHTML = '<p style="text-align:center;padding:20px;color:#999;font-size:14px;">Tu carrito está vacío.<br><a href="productos.html" style="color:rgb(221,33,71)">Volver a la tienda</a></p>';
+  } else {
+    lista.innerHTML = carrito.map(p => `
+      <div class="summary-item">
+        <div style="position:relative">
+          <div class="item-img"><img src="${p.img}" alt="${p.nombre}"/></div>
+          <span class="badge-qty">${p.cantidad}</span>
+        </div>
+        <div class="item-info">
+          <div class="item-name">${p.nombre}</div>
+          <div class="item-qty">Cant: ${p.cantidad}</div>
+        </div>
+        <div class="item-price">$${(p.precio * p.cantidad).toFixed(2)}</div>
+      </div>`).join('');
+  }
+  const sub = getSubtotal();
+  document.getElementById('subtotal-val').textContent = '$' + sub.toFixed(2);
+  document.getElementById('iva-val').textContent      = '$' + getIVA().toFixed(2);
+  document.getElementById('envio-val').textContent    = carrito.length > 0 ? '$' + ENVIO.toFixed(2) : '$0.00';
+  document.getElementById('grand-total').textContent  = '$' + getTotal().toFixed(2);
+  document.getElementById('btn-total').textContent    = '$' + getTotal().toFixed(2);
+}
+renderResumen();
+
+// Card interactions
+document.getElementById('cardNumber').addEventListener('input', function(e) {
+  let v = e.target.value.replace(/\D/g,'').substring(0,16);
+  e.target.value = v.replace(/(.{4})/g,'$1 ').trim();
+  const groups = v.padEnd(16,'•').match(/.{4}/g);
+  document.getElementById('display-number').innerHTML = groups.map(g=>`<span class="group">${g}</span>`).join('');
+  let brand = '💳';
+  if(v.startsWith('4')) brand='💙 VISA';
+  else if(v.startsWith('5')) brand='🔴 MC';
+  else if(v.startsWith('3')) brand='🟡 AMEX';
+  document.getElementById('display-brand').textContent = brand;
+});
+document.getElementById('cardName').addEventListener('input', function(e) {
+  document.getElementById('display-name').textContent = e.target.value.toUpperCase() || 'NOMBRE APELLIDO';
+});
+document.getElementById('cardExp').addEventListener('input', function(e) {
+  let v = e.target.value.replace(/\D/g,'');
+  if(v.length >= 2) v = v.slice(0,2) + '/' + v.slice(2,4);
+  e.target.value = v;
+  document.getElementById('display-exp').textContent = v || 'MM/AA';
+});
+
+function selectMethod(m) {
+  ['card','nequi','transfer'].forEach(id => {
+    document.getElementById('pm-'+id).classList.remove('selected');
+    document.getElementById('panel-'+id).classList.remove('active');
+  });
+  document.getElementById('pm-'+m).classList.add('selected');
+  document.getElementById('panel-'+m).classList.add('active');
+}
+
+// RF7 – Cupones desde KK (admin puede agregar cupones)
+function aplicarCupon() {
+  const code = document.getElementById('couponInput').value.toUpperCase().trim();
+  const cupones = KK.getCupones();
+  if (cupones[code]) {
+    descuentoAplicado = Math.round(getSubtotal() * cupones[code] / 100);
+    document.getElementById('discount-row').style.display = 'flex';
+    document.getElementById('discount-val').textContent   = '–$' + descuentoAplicado.toFixed(2);
+    document.getElementById('grand-total').textContent    = '$' + getTotal().toFixed(2);
+    document.getElementById('btn-total').textContent      = '$' + getTotal().toFixed(2);
+    document.getElementById('couponInput').style.borderColor = '#22c55e';
+  } else if (code) {
+    document.getElementById('couponInput').style.borderColor = 'rgb(221,33,71)';
+  }
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).catch(()=>{});
+  event.target.textContent = '✓';
+  setTimeout(() => event.target.textContent = 'copiar', 1500);
+}
+
+function validate() {
+  const required = ['firstName','lastName','email','phone','address','city'];
+  for (const id of required) {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) { el.style.borderColor='rgb(221,33,71)'; el.focus(); return false; }
+  }
+  const method = document.querySelector('input[name="payment"]:checked').value;
+  if (method === 'Tarjeta de crédito/débito') {
+    if (document.getElementById('cardNumber').value.replace(/\s/g,'').length < 15) { alert('Número de tarjeta inválido'); return false; }
+    if (document.getElementById('cardExp').value.length < 5) { alert('Fecha de vencimiento inválida'); return false; }
+    if (document.getElementById('cardCvv').value.length < 3) { alert('CVV inválido'); return false; }
+  }
+  return true;
+}
+
+function procesarPago() {
+  if (KK.getCarrito().length === 0) { alert('Tu carrito está vacío'); return; }
+  if (!validate()) return;
+  const btn = document.getElementById('btnPay');
+  btn.classList.add('loading');
+  btn.innerHTML = '<span class="spinner"></span> Procesando pago<span class="neon-dot"></span><span class="neon-dot"></span><span class="neon-dot"></span>';
+
+  setTimeout(() => {
+    btn.classList.remove('loading');
+
+    // RF3, RF4, RD2, RD3, RD5, RD8 – Registrar venta completa
+    const datosEnvio = {
+      nombre: document.getElementById('firstName').value,
+      apellido: document.getElementById('lastName').value,
+      email: document.getElementById('email').value,
+      telefono: document.getElementById('phone').value,
+      direccion: document.getElementById('address').value,
+      ciudad: document.getElementById('city').value,
+      departamento: document.getElementById('state').value,
+      codigoPostal: document.getElementById('zip').value,
+      pais: document.getElementById('country').value,
+    };
+    const metodoPago = document.querySelector('input[name="payment"]:checked').value;
+    const carrito    = KK.getCarrito();
+
+    ventaActual = KK.registrarVenta(datosEnvio, metodoPago, carrito, descuentoAplicado);
+
+    document.getElementById('order-id-display').textContent = ventaActual.id;
+    document.getElementById('successModal').classList.add('active');
+  }, 2800);
+}
+
+// RF6 – Factura automática
+function descargarFactura() {
+  if (!ventaActual) return;
+  const html = KK.generarFacturaHTML(ventaActual);
+  const win  = window.open('', '_blank');
+  win.document.write(html);
+  win.document.close();
+}
+
+function finalizarCompra() {
+  window.location.href = 'productos.html';
+}
+
+document.getElementById('successModal').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('active');
+});
+</script>
+</body>
+</html>

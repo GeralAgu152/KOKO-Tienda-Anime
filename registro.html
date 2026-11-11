@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koko – Registro</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="CSS/auth.css">
+</head>
+<body>
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+
+    <a href="koko.html" class="auth-logo">Koko</a>
+    <p class="auth-sub">Crea tu cuenta y únete al universo otaku 🌸</p>
+
+    <form id="registroForm">
+      <div class="auth-field">
+        <label>Nombre de usuario</label>
+        <input type="text" id="nombre" placeholder="Tu nombre o apodo" required>
+      </div>
+      <div class="auth-field">
+        <label>Correo electrónico</label>
+        <input type="email" id="email" placeholder="ejemplo@correo.com" required>
+      </div>
+      <div class="auth-field">
+        <label>Contraseña</label>
+        <input type="password" id="password" placeholder="Mínimo 6 caracteres" required>
+      </div>
+      <div class="auth-field">
+        <label>Confirmar contraseña</label>
+        <input type="password" id="password2" placeholder="Repite tu contraseña" required>
+      </div>
+
+      <div class="auth-check">
+        <input type="checkbox" id="terminos" required>
+        <label for="terminos">Acepto los <a href="#">términos y condiciones</a></label>
+      </div>
+
+      <button type="submit" class="auth-btn-primary">Crear cuenta</button>
+      <a href="inicioSesion.html" class="auth-btn-secondary">Ya tengo cuenta – Iniciar sesión</a>
+    </form>
+
+    <div class="auth-msg" id="authMsg"></div>
+  </div>
+</div>
+
+<script src="JS/koko.js"></script>
+<script>
+document.getElementById("registroForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const nombre = document.getElementById("nombre").value.trim();
+  const email  = document.getElementById("email").value.trim();
+  const pass   = document.getElementById("password").value;
+  const pass2  = document.getElementById("password2").value;
+  const msg    = document.getElementById("authMsg");
+
+  if (pass !== pass2) {
+    msg.textContent = "❌ Las contraseñas no coinciden.";
+    msg.className = "auth-msg error"; return;
+  }
+  if (pass.length < 6) {
+    msg.textContent = "❌ La contraseña debe tener al menos 6 caracteres.";
+    msg.className = "auth-msg error"; return;
+  }
+  if (!email.includes('@')) {
+    msg.textContent = "❌ Ingresa un correo válido.";
+    msg.className = "auth-msg error"; return;
+  }
+
+  // RF0: Registro con contraseña hasheada (no en texto plano)
+  KK.registrar(nombre, email, pass);
+
+  msg.textContent = "✅ ¡Cuenta creada con éxito! Redirigiendo...";
+  msg.className = "auth-msg success";
+  setTimeout(() => window.location.href = "inicioSesion.html", 1500);
+});
+</script>
+
+</body>
+</html>
